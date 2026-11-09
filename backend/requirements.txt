@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+kubernetes
+pydantic
+pydantic-settings
+python-dotenv
+httpx
+pymongo>=4.13

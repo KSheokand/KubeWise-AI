@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: oom-test
+  namespace: kubewise-demo
+
+spec:
+  restartPolicy: Always
+
+  containers:
+    - name: memory-eater
+      image: busybox:1.36
+
+      command:
+        - sh
+        - -c
+        - |
+          echo "Starting memory stress test..."
+          dd if=/dev/zero of=/memory/oom-test bs=1M count=200
+          echo "Allocation completed"
+          sleep 60
+
+      resources:
+        requests:
+          memory: 64Mi
+        limits:
+          memory: 128Mi
+
+      volumeMounts:
+        - name: memory-volume
+          mountPath: /memory
+
+  volumes:
+    - name: memory-volume
+      emptyDir:
+        medium: Memory
+        sizeLimit: 256Mi

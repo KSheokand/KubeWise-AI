@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-demo
+  namespace: kubewise-demo
+  labels:
+    app: nginx-demo
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: nginx-demo
+
+  template:
+    metadata:
+      labels:
+        app: nginx-demo
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:stable-alpine
+
+          ports:
+            - containerPort: 80
+              name: http
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+
+            limits:
+              cpu: 250m
+              memory: 128Mi
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20

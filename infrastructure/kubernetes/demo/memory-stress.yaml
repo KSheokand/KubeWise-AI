@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memory-stress
+  namespace: kubewise-demo
+  labels:
+    app: memory-stress
+spec:
+  restartPolicy: Never
+
+  containers:
+    - name: stress
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          dd if=/dev/zero of=/memory/memory-test bs=1M count=105
+          sleep 600
+
+      resources:
+        requests:
+          cpu: 100m
+          memory: 32Mi
+        limits:
+          cpu: 200m
+          memory: 120Mi
+
+      volumeMounts:
+        - name: memory-volume
+          mountPath: /memory
+
+  volumes:
+    - name: memory-volume
+      emptyDir:
+        medium: Memory
+        sizeLimit: 110Mi

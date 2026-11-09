@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-pull-test
+  namespace: kubewise-demo
+
+spec:
+  restartPolicy: Never
+
+  containers:
+    - name: test-container
+      image: nonexistent-kubewise-image:999.999
